@@ -8,7 +8,7 @@ def find_file(filename = 'Data Source', file_ext = ".csv", search_path = "/Users
         for file in files:
             if file == 'Data Source'+'.csv':
                 return os.path.join(root,file)
-    return print("No files found")
+    return print("No files found") 
 
 def load_data(filepath):
     if filepath.endswith(".csv"):
@@ -26,7 +26,7 @@ if file_path:
     print(f'data loaded successfully.')
 else:
     print("File not found")
-    exit 
+    exit
 
 '''print(data)'''
 
