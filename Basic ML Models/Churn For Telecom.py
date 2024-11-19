@@ -3,13 +3,16 @@ import pandas as pd
 import os as os
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
-def find_file(filename = 'Churn', file_ext = ".csv", search_path = "/Users/rushikeshmahajan/Desktop/Documents/"):
+
+'''File Finding algorithm'''
+def find_file(filename = 'churn', file_ext = ".csv", search_path = "/Users/rushikeshmahajan/Desktop/Documents/"):
     for root, dirs, files in os.walk(search_path):
         for file in files:
-            if file == 'Churn'+'.csv':
+            if file == 'churn'+'.csv':
                 return os.path.join(root,file)
     return print("No files found") 
 
+'''Data Loading'''
 def load_data(filepath):
     if filepath.endswith(".csv"):
         print("File Found")
@@ -28,15 +31,22 @@ else:
     print("File not found")
     exit
 
-'''print(data)'''
-
+'''Regression'''
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
-data['class'] = data['Fraud'].apply(lambda x : 1 if x == "Yes" else 0)
+#DATA TRANSFORMATION
+data['Churn_pred'] = data['Churn'].apply(lambda x : 1 if x == "Yes" else 0)
+data = data.replace({'Yes' :1, 'No':0, 'No phone service' :0, 'No internet service' :0 , ' ':0 })
+print(data)
 
-X = data[['Feature_1', 'Feature_2', 'Feature_3', 'Feature_4', 'Feature_5']].copy()
-y = data['Fraud'].copy()
+
+X = data[[  'SeniorCitizen', 'Partner', 'Dependents',
+       'tenure', 'PhoneService', 'MultipleLines', 
+       'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport',
+       'StreamingTV', 'StreamingMovies',  'PaperlessBilling',
+        'MonthlyCharges', 'TotalCharges']].copy()
+y = data['Churn'].copy()
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -54,10 +64,3 @@ print(f"y_pred: {y_pred}")  # Print y_pred values next to the variable name
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
 print("Classification Report:\n", classification_report(y_test, y_pred))
-
-
-
-
-
-
-
